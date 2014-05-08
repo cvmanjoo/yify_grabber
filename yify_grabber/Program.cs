@@ -14,10 +14,12 @@ namespace yify_grabber
         static void Main(string[] args)
         {
             Int32 ID;
+            string connectionString = "Data Source=MONSTER-PC\\SQLEXPRESS;Initial Catalog=yify;Integrated Security=True";
 
-            SqlConnection connection = new SqlConnection("Data Source=MONSTER-PC\\SQLEXPRESS;Initial Catalog=yify;Integrated Security=True");
+            SqlConnection connection = new SqlConnection(connectionString);
             connection.Open();
 
+            //Get Maxiumum MovieID from Database!
             String CountQuery = "SELECT MAX(MovieID) FROM Movies;";
             SqlCommand CountCommand = new SqlCommand(CountQuery, connection);
 
@@ -29,20 +31,22 @@ namespace yify_grabber
             {
                 ID = 0;
             }
-            Console.WriteLine(ID);
+            Console.WriteLine("Local Database has "+ID+" Records!");
 
-            Int32 MovieCount = 5000;
+            //Get Maximum MovieID from Yify API
+            XmlDocument list = new XmlDocument();
+            list.Load("https://yts.re/api/list.xml");
 
-            //MovieCount = 150;
+            XmlNodeList elemlist = list.GetElementsByTagName("MovieID");
+            String MaxMovieID = elemlist[0].InnerText;
 
+            Console.WriteLine("Yify Database has "+ MaxMovieID + " Movies!");
+            Int32 MovieCount = Convert.ToInt32(MaxMovieID);
 
-
+            //Collect and insert into database!
             for (ID = ID + 1; ID <= MovieCount; ID++)
             {
-
-
                 String XmlUrl = "http://yts.re/api/movie.xml?id=" + ID.ToString();
-
 
                 XmlDocument doc = new XmlDocument();
                 doc.Load(XmlUrl);
@@ -171,8 +175,6 @@ namespace yify_grabber
 
                     elemList = doc.GetElementsByTagName("SizeByte");
                     String SizeByte = elemList[0].InnerText;
-
-
 
                     Console.WriteLine(MovieID + " - " + MovieTitle);
 
@@ -305,7 +307,6 @@ namespace yify_grabber
                     command.Parameters.Add("@SizeByte", SqlDbType.BigInt);
                     command.Parameters["@SizeByte"].Value = SizeByte;
 
-
                     try
                     {
                         command.ExecuteNonQuery();
@@ -314,24 +315,15 @@ namespace yify_grabber
                     {
                         Console.WriteLine(e.ToString());
                     }
-
                 }
                 catch
                 {
-
-                    //String InsertQuery = "INSERT INTO Movies(MovieID) VALUES(@MovieID)";
-                    //SqlCommand command = new SqlCommand(InsertQuery, testconnec);
-
-                    //command.Parameters.Add("@MovieID", SqlDbType.Int);
-                    //command.Parameters["@MovieID"].Value = ID;
-                    //command.ExecuteNonQuery();
-
+                    //If movie id is invalid show NULL! 
                     Console.WriteLine(ID + " - NULL");
                 }
             }
             Console.WriteLine("End of Execution");
-            Console.ReadKey();
+             Console.ReadKey();
         }
-
     }
 }
