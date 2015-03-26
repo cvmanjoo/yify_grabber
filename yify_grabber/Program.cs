@@ -14,7 +14,8 @@ namespace yify_grabber
         static void Main(string[] args)
         {
             Int32 ID;
-            string connectionString = "Data Source=MONSTER-PC\\SQLEXPRESS;Initial Catalog=yify;Integrated Security=True";
+            string connectionString = "Data Source=MONSTER-PC;Initial Catalog=yify;Integrated Security=True";
+            
 
             SqlConnection connection = new SqlConnection(connectionString);
             connection.Open();
@@ -35,9 +36,9 @@ namespace yify_grabber
 
             //Get Maximum MovieID from Yify API
             XmlDocument list = new XmlDocument();
-            list.Load("https://yts.re/api/list.xml");
+            list.Load("https://yts.to/api/v2/list_movies.xml");
 
-            XmlNodeList elemlist = list.GetElementsByTagName("MovieID");
+            XmlNodeList elemlist = list.GetElementsByTagName("id");
             String MaxMovieID = elemlist[0].InnerText;
 
             Console.WriteLine("Yify Database has "+ MaxMovieID + " Movies!");
@@ -46,7 +47,7 @@ namespace yify_grabber
             //Collect and insert into database!
             for (ID = ID + 1; ID <= MovieCount; ID++)
             {
-                String XmlUrl = "http://yts.re/api/movie.xml?id=" + ID.ToString();
+                String XmlUrl = "https://yts.to/api/v2/movie_details.xml?movie_id=" + ID.ToString();
 
                 XmlDocument doc = new XmlDocument();
                 doc.Load(XmlUrl);
