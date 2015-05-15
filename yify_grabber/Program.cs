@@ -21,7 +21,7 @@ namespace yify_grabber
             connection.Open();
 
             //Get Maxiumum MovieID from Database!
-            String CountQuery = "SELECT MAX(MovieID) FROM Movies;";
+            String CountQuery = "SELECT MAX(id) FROM movie_details;";
             SqlCommand CountCommand = new SqlCommand(CountQuery, connection);
 
             try
@@ -38,7 +38,7 @@ namespace yify_grabber
             XmlDocument list = new XmlDocument();
             list.Load("https://yts.to/api/v2/list_movies.xml");
 
-            XmlNodeList elemlist = list.GetElementsByTagName("id");
+            XmlNodeList elemlist = list.GetElementsByTagName("movie_count");
             String MaxMovieID = elemlist[0].InnerText;
 
             Console.WriteLine("Yify Database has "+ MaxMovieID + " Movies!");
@@ -54,259 +54,151 @@ namespace yify_grabber
 
                 try
                 {
-                    XmlNodeList elemList = doc.GetElementsByTagName("MovieID");
-                    String MovieID = elemList[0].InnerText;
+                    XmlNodeList elemList = doc.GetElementsByTagName("id");
+                    String id = elemList[0].InnerText;
 
-                    elemList = doc.GetElementsByTagName("MovieUrl");
-                    String MovieUrl = elemList[0].InnerText;
+                    elemList = doc.GetElementsByTagName("url");
+                    String url = elemList[0].InnerText;
 
-                    elemList = doc.GetElementsByTagName("DateUploaded");
-                    String DateUploaded = elemList[0].InnerText;
+                    elemList = doc.GetElementsByTagName("imdb_code");
+                    String imdb_code = elemList[0].InnerText;
 
-                    elemList = doc.GetElementsByTagName("Uploader");
-                    String Uploader = elemList[0].InnerText;
+                    elemList = doc.GetElementsByTagName("title");
+                    String title = elemList[0].InnerText;
 
-                    elemList = doc.GetElementsByTagName("UploaderUID");
-                    String UploaderUID = elemList[0].InnerText;
+                    elemList = doc.GetElementsByTagName("title_long");
+                    String title_long = elemList[0].InnerText;
 
-                    elemList = doc.GetElementsByTagName("UploaderNotes");
-                    String UploaderNotes = elemList[0].InnerText;
+                    elemList = doc.GetElementsByTagName("slug");
+                    String slug = elemList[0].InnerText;
 
-                    elemList = doc.GetElementsByTagName("Quality");
-                    String Quality = elemList[0].InnerText;
+                    elemList = doc.GetElementsByTagName("year");
+                    String year = elemList[0].InnerText;
 
-                    elemList = doc.GetElementsByTagName("Resolution");
-                    String Resolution = elemList[0].InnerText;
+                    elemList = doc.GetElementsByTagName("rating");
+                    String rating = elemList[0].InnerText;
 
-                    elemList = doc.GetElementsByTagName("FrameRate");
-                    String FrameRate = elemList[0].InnerText;
-
-                    elemList = doc.GetElementsByTagName("Language");
+                    elemList = doc.GetElementsByTagName("runtime");
+                    String runtime = elemList[0].InnerText;
+/*
+                    elemList = doc.GetElementsByTagName("genre1");
                     String Language = elemList[0].InnerText;
 
-                    elemList = doc.GetElementsByTagName("Subtitles");
+                    elemList = doc.GetElementsByTagName("genre2");
                     String Subtitles = elemList[0].InnerText;
+*/
+                    elemList = doc.GetElementsByTagName("language");
+                    String language = elemList[0].InnerText;
 
-                    elemList = doc.GetElementsByTagName("LargeCover");
-                    String LargeCover = elemList[0].InnerText;
+                    elemList = doc.GetElementsByTagName("mpa_rating");
+                    String mpa_rating = elemList[0].InnerText;
 
-                    elemList = doc.GetElementsByTagName("MediumCover");
-                    String MediumCover = elemList[0].InnerText;
+                    elemList = doc.GetElementsByTagName("download_count");
+                    String download_count = elemList[0].InnerText;
 
-                    elemList = doc.GetElementsByTagName("LargeScreenshot1");
-                    String LargeScreenshot1 = elemList[0].InnerText;
+                    elemList = doc.GetElementsByTagName("like_count");
+                    String like_count = elemList[0].InnerText;
 
-                    elemList = doc.GetElementsByTagName("LargeScreenshot2");
-                    String LargeScreenshot2 = elemList[0].InnerText;
+                    elemList = doc.GetElementsByTagName("rt_critics_score");
+                    String rt_critics_score = elemList[0].InnerText;
 
-                    elemList = doc.GetElementsByTagName("LargeScreenshot3");
-                    String LargeScreenshot3 = elemList[0].InnerText;
+                    elemList = doc.GetElementsByTagName("rt_critics_rating");
+                    String rt_critics_rating = elemList[0].InnerText;
 
-                    elemList = doc.GetElementsByTagName("MediumScreenshot1");
-                    String MediumScreenshot1 = elemList[0].InnerText;
+                    elemList = doc.GetElementsByTagName("rt_audience_score");
+                    String rt_audience_score = elemList[0].InnerText;
 
-                    elemList = doc.GetElementsByTagName("MediumScreenshot2");
-                    String MediumScreenshot2 = elemList[0].InnerText;
+                    elemList = doc.GetElementsByTagName("rt_audience_rating");
+                    String rt_audience_rating = elemList[0].InnerText;
 
-                    elemList = doc.GetElementsByTagName("MediumScreenshot3");
-                    String MediumScreenshot3 = elemList[0].InnerText;
+                    elemList = doc.GetElementsByTagName("description_intro");
+                    String description_intro = elemList[0].InnerText;
 
-                    elemList = doc.GetElementsByTagName("ImdbCode");
-                    String ImdbCode = elemList[0].InnerText;
+                    elemList = doc.GetElementsByTagName("description_full");
+                    String description_full = elemList[0].InnerText;
 
-                    elemList = doc.GetElementsByTagName("ImdbLink");
-                    String ImdbLink = elemList[0].InnerText;
+                    elemList = doc.GetElementsByTagName("yt_trailer_code");
+                    String yt_trailer_code = elemList[0].InnerText;
 
-                    elemList = doc.GetElementsByTagName("MovieTitle");
-                    String MovieTitle = elemList[0].InnerText;
+                    elemList = doc.GetElementsByTagName("date_uploaded");
+                    String date_uploaded = elemList[0].InnerText;
 
-                    elemList = doc.GetElementsByTagName("MovieTitleClean");
-                    String MovieTitleClean = elemList[0].InnerText;
+                    elemList = doc.GetElementsByTagName("date_uploaded_unix");
+                    String date_uploaded_unix = elemList[0].InnerText;
 
-                    elemList = doc.GetElementsByTagName("MovieYear");
-                    String MovieYear = elemList[0].InnerText;
+                    
+                    Console.WriteLine(id + " - " + title_long);
 
-                    elemList = doc.GetElementsByTagName("MovieRating");
-                    String MovieRating = elemList[0].InnerText;
-
-                    elemList = doc.GetElementsByTagName("MovieRuntime");
-                    String MovieRuntime = elemList[0].InnerText;
-
-                    elemList = doc.GetElementsByTagName("YoutubeTrailerID");
-                    String YoutubeTrailerID = elemList[0].InnerText;
-
-                    elemList = doc.GetElementsByTagName("YoutubeTrailerUrl");
-                    String YoutubeTrailerUrl = elemList[0].InnerText;
-
-                    elemList = doc.GetElementsByTagName("AgeRating");
-                    String AgeRating = elemList[0].InnerText;
-
-                    elemList = doc.GetElementsByTagName("Genre1");
-                    String Genre1 = elemList[0].InnerText;
-
-                    elemList = doc.GetElementsByTagName("Genre2");
-                    String Genre2 = elemList[0].InnerText;
-
-                    elemList = doc.GetElementsByTagName("ShortDescription");
-                    String ShortDescription = elemList[0].InnerText;
-
-                    elemList = doc.GetElementsByTagName("LongDescription");
-                    String LongDescription = elemList[0].InnerText;
-
-                    elemList = doc.GetElementsByTagName("Downloaded");
-                    String Downloaded = elemList[0].InnerText;
-
-                    elemList = doc.GetElementsByTagName("TorrentUrl");
-                    String TorrentUrl = elemList[0].InnerText;
-
-                    elemList = doc.GetElementsByTagName("TorrentHash");
-                    String TorrentHash = elemList[0].InnerText;
-
-                    elemList = doc.GetElementsByTagName("TorrentMagnetUrl");
-                    String TorrentMagnetUrl = elemList[0].InnerText;
-
-                    elemList = doc.GetElementsByTagName("TorrentSeeds");
-                    String TorrentSeeds = elemList[0].InnerText;
-
-                    elemList = doc.GetElementsByTagName("TorrentPeers");
-                    String TorrentPeers = elemList[0].InnerText;
-
-                    elemList = doc.GetElementsByTagName("Size");
-                    String Size = elemList[0].InnerText;
-
-                    elemList = doc.GetElementsByTagName("SizeByte");
-                    String SizeByte = elemList[0].InnerText;
-
-                    Console.WriteLine(MovieID + " - " + MovieTitle);
-
-                    String InsertQuery = "INSERT INTO Movies VALUES(@MovieID,@MovieUrl,@DateUploaded,@Uploader,@UploaderUID,@UploaderNotes,@Quality,@Resolution,@FrameRate,@Language,@Subtitles,@LargeCover,@MediumCover,@LargeScreenshot1,@LargeScreenshot2,@LargeScreenshot3,@MediumScreenshot1,@MediumScreenshot2,@MediumScreenshot3,@ImdbCode,@ImdbLink,@MovieTitle,@MovieTitleClean,@MovieYear,@MovieRating,@MovieRuntime,@YoutubeTrailerID,@YoutubeTrailerUrl,@AgeRating,@Genre1,@Genre2,@ShortDescription,@LongDescription,@Downloaded,@TorrentUrl,@TorrentHash,@TorrentMagnetUrl,@TorrentSeeds,@TorrentPeers,@Size,@SizeByte)";
-
+                    String InsertQuery = "INSERT INTO movie_details VALUES(@id,@url,@imdb_code,@title,@title_long,@slug,@year,@rating,@runtime,@language,@mpa_rating,@download_count,@like_count,@rt_critics_score,@rt_critics_rating,@rt_audience_score,@rt_audience_rating,@description_intro,@description_full,@yt_trailer_code,@date_uploaded,@date_uploaded_unix)";
                     //Console.WriteLine(InsertQuery);
 
                     SqlCommand command = new SqlCommand(InsertQuery, connection);
 
-                    command.Parameters.Add("@MovieID", SqlDbType.Int);
-                    command.Parameters["@MovieID"].Value = MovieID;
+                    command.Parameters.Add("@id", SqlDbType.Int);
+                    command.Parameters["@id"].Value = id;
 
-                    command.Parameters.Add("@MovieUrl", SqlDbType.VarChar);
-                    command.Parameters["@MovieUrl"].Value = MovieUrl;
+                    command.Parameters.Add("@url", SqlDbType.VarChar);
+                    command.Parameters["@url"].Value = url;
 
-                    command.Parameters.Add("@DateUploaded", SqlDbType.DateTime);
-                    command.Parameters["@DateUploaded"].Value = DateUploaded;
+                    command.Parameters.Add("@imdb_code", SqlDbType.VarChar);
+                    command.Parameters["@imdb_code"].Value = imdb_code;
 
-                    command.Parameters.Add("@Uploader", SqlDbType.VarChar);
-                    command.Parameters["@Uploader"].Value = Uploader;
+                    command.Parameters.Add("@title", SqlDbType.VarChar);
+                    command.Parameters["@title"].Value = title;
 
-                    command.Parameters.Add("@UploaderUID", SqlDbType.Int);
-                    command.Parameters["@UploaderUID"].Value = UploaderUID;
+                    command.Parameters.Add("@title_long", SqlDbType.VarChar);
+                    command.Parameters["@title_long"].Value = title_long;
 
-                    command.Parameters.Add("@UploaderNotes", SqlDbType.Text);
-                    command.Parameters["@UploaderNotes"].Value = UploaderNotes;
+                    command.Parameters.Add("@slug", SqlDbType.VarChar);
+                    command.Parameters["@slug"].Value = slug;
 
-                    command.Parameters.Add("@Quality", SqlDbType.VarChar);
-                    command.Parameters["@Quality"].Value = Quality;
+                    command.Parameters.Add("@year", SqlDbType.VarChar);
+                    command.Parameters["@year"].Value = year;
 
-                    command.Parameters.Add("@Resolution", SqlDbType.VarChar);
-                    command.Parameters["@Resolution"].Value = Resolution;
+                    command.Parameters.Add("@rating", SqlDbType.VarChar);
+                    command.Parameters["@rating"].Value = rating;
 
-                    command.Parameters.Add("@FrameRate", SqlDbType.VarChar);
-                    command.Parameters["@FrameRate"].Value = FrameRate;
+                    command.Parameters.Add("@runtime", SqlDbType.VarChar);
+                    command.Parameters["@runtime"].Value = runtime;
 
-                    command.Parameters.Add("@Language", SqlDbType.VarChar);
-                    command.Parameters["@Language"].Value = Language;
+                    command.Parameters.Add("@language", SqlDbType.VarChar);
+                    command.Parameters["@language"].Value = language;
 
-                    command.Parameters.Add("@Subtitles", SqlDbType.VarChar);
-                    command.Parameters["@Subtitles"].Value = Subtitles;
+                    command.Parameters.Add("@mpa_rating", SqlDbType.VarChar);
+                    command.Parameters["@mpa_rating"].Value = mpa_rating;
 
-                    command.Parameters.Add("@LargeCover", SqlDbType.VarChar);
-                    command.Parameters["@LargeCover"].Value = LargeCover;
+                    command.Parameters.Add("@download_count", SqlDbType.Int);
+                    command.Parameters["@download_count"].Value = download_count;
 
-                    command.Parameters.Add("@MediumCover", SqlDbType.VarChar);
-                    command.Parameters["@MediumCover"].Value = MediumCover;
+                    command.Parameters.Add("@like_count", SqlDbType.Int);
+                    command.Parameters["@like_count"].Value = like_count;
 
-                    command.Parameters.Add("@LargeScreenshot1", SqlDbType.VarChar);
-                    command.Parameters["@LargeScreenshot1"].Value = LargeScreenshot1;
+                    command.Parameters.Add("@rt_critics_score", SqlDbType.Int);
+                    command.Parameters["@rt_critics_score"].Value = rt_critics_score;
 
-                    command.Parameters.Add("@LargeScreenshot2", SqlDbType.VarChar);
-                    command.Parameters["@LargeScreenshot2"].Value = LargeScreenshot2;
+                    command.Parameters.Add("@rt_critics_rating", SqlDbType.VarChar);
+                    command.Parameters["@rt_critics_rating"].Value = rt_critics_rating;
 
-                    command.Parameters.Add("@LargeScreenshot3", SqlDbType.VarChar);
-                    command.Parameters["@LargeScreenshot3"].Value = LargeScreenshot3;
+                    command.Parameters.Add("@rt_audience_score", SqlDbType.Int);
+                    command.Parameters["@rt_audience_score"].Value = rt_audience_score;
 
-                    command.Parameters.Add("@MediumScreenshot1", SqlDbType.VarChar);
-                    command.Parameters["@MediumScreenshot1"].Value = MediumScreenshot1;
+                    command.Parameters.Add("@rt_audience_rating", SqlDbType.VarChar);
+                    command.Parameters["@rt_audience_rating"].Value = rt_audience_rating;
 
-                    command.Parameters.Add("@MediumScreenshot2", SqlDbType.VarChar);
-                    command.Parameters["@MediumScreenshot2"].Value = MediumScreenshot2;
+                    command.Parameters.Add("@description_intro", SqlDbType.Text);
+                    command.Parameters["@description_intro"].Value = description_intro;
 
-                    command.Parameters.Add("@MediumScreenshot3", SqlDbType.VarChar);
-                    command.Parameters["@MediumScreenshot3"].Value = MediumScreenshot3;
+                    command.Parameters.Add("@description_full", SqlDbType.Text);
+                    command.Parameters["@description_full"].Value = description_full;
 
-                    command.Parameters.Add("@ImdbCode", SqlDbType.VarChar);
-                    command.Parameters["@ImdbCode"].Value = ImdbCode;
+                    command.Parameters.Add("@yt_trailer_code", SqlDbType.VarChar);
+                    command.Parameters["@yt_trailer_code"].Value = yt_trailer_code;
 
-                    command.Parameters.Add("@ImdbLink", SqlDbType.VarChar);
-                    command.Parameters["@ImdbLink"].Value = ImdbLink;
+                    command.Parameters.Add("@date_uploaded", SqlDbType.DateTime);
+                    command.Parameters["@date_uploaded"].Value = date_uploaded;
 
-                    command.Parameters.Add("@MovieTitle", SqlDbType.VarChar);
-                    command.Parameters["@MovieTitle"].Value = MovieTitle;
-
-                    command.Parameters.Add("@MovieTitleClean", SqlDbType.VarChar);
-                    command.Parameters["@MovieTitleClean"].Value = MovieTitleClean;
-
-                    command.Parameters.Add("@MovieYear", SqlDbType.VarChar);
-                    command.Parameters["@MovieYear"].Value = MovieYear;
-
-                    command.Parameters.Add("@MovieRating", SqlDbType.VarChar);
-                    command.Parameters["@MovieRating"].Value = MovieRating;
-
-                    command.Parameters.Add("@MovieRuntime", SqlDbType.VarChar);
-                    command.Parameters["@MovieRuntime"].Value = MovieRuntime;
-
-                    command.Parameters.Add("@YoutubeTrailerID", SqlDbType.VarChar);
-                    command.Parameters["@YoutubeTrailerID"].Value = YoutubeTrailerID;
-
-                    command.Parameters.Add("@YoutubeTrailerUrl", SqlDbType.VarChar);
-                    command.Parameters["@YoutubeTrailerUrl"].Value = YoutubeTrailerUrl;
-
-                    command.Parameters.Add("@AgeRating", SqlDbType.VarChar);
-                    command.Parameters["@AgeRating"].Value = AgeRating;
-
-                    command.Parameters.Add("@Genre1", SqlDbType.VarChar);
-                    command.Parameters["@Genre1"].Value = Genre1;
-
-                    command.Parameters.Add("@Genre2", SqlDbType.VarChar);
-                    command.Parameters["@Genre2"].Value = Genre2;
-
-                    command.Parameters.Add("@ShortDescription", SqlDbType.Text);
-                    command.Parameters["@ShortDescription"].Value = ShortDescription;
-
-                    command.Parameters.Add("@LongDescription", SqlDbType.Text);
-                    command.Parameters["@LongDescription"].Value = LongDescription;
-
-                    command.Parameters.Add("@Downloaded", SqlDbType.Int);
-                    command.Parameters["@Downloaded"].Value = Downloaded;
-
-                    command.Parameters.Add("@TorrentUrl", SqlDbType.VarChar);
-                    command.Parameters["@TorrentUrl"].Value = TorrentUrl;
-
-                    command.Parameters.Add("@TorrentHash", SqlDbType.VarChar);
-                    command.Parameters["@TorrentHash"].Value = TorrentHash;
-
-                    command.Parameters.Add("@TorrentMagnetUrl", SqlDbType.VarChar);
-                    command.Parameters["@TorrentMagnetUrl"].Value = TorrentMagnetUrl;
-
-                    command.Parameters.Add("@TorrentSeeds", SqlDbType.Int);
-                    command.Parameters["@TorrentSeeds"].Value = TorrentSeeds;
-
-                    command.Parameters.Add("@TorrentPeers", SqlDbType.Int);
-                    command.Parameters["@TorrentPeers"].Value = TorrentPeers;
-
-                    command.Parameters.Add("@Size", SqlDbType.VarChar);
-                    command.Parameters["@Size"].Value = Size;
-
-                    command.Parameters.Add("@SizeByte", SqlDbType.BigInt);
-                    command.Parameters["@SizeByte"].Value = SizeByte;
+                    command.Parameters.Add("@date_uploaded_unix", SqlDbType.Float);
+                    command.Parameters["@date_uploaded_unix"].Value = date_uploaded_unix;
 
                     try
                     {
@@ -314,7 +206,9 @@ namespace yify_grabber
                     }
                     catch (Exception e)
                     {
-                        Console.WriteLine(e.ToString());
+                       
+                       // Console.WriteLine(e.ToString());
+                        Console.WriteLine(e.Message);
                     }
                 }
                 catch

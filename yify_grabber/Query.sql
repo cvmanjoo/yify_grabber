@@ -1,54 +1,54 @@
 ﻿--CREATE DATABASE yify;
 
-USE yify;
+USE [yify]
+GO
 
---DROP TABLE movies;
+/****** Object:  Table [dbo].[movie_details]    Script Date: 15-May-2015 10:15:15 PM ******/
+SET ANSI_NULLS ON
+GO
 
-CREATE TABLE movies (
-MovieID INT DEFAULT 0,
-MovieUrl VARCHAR(1024),
-DateUploaded DATETIME,
-Uploader VARCHAR(20),
-UploaderUID INT,
-UploaderNotes TEXT,
-Quality VARCHAR(10),
-Resolution VARCHAR(10),
-FrameRate VARCHAR(10),
-Language VARCHAR(20),
-Subtitles VARCHAR(20),
-LargeCover TEXT,
-MediumCover TEXT,
-LargeScreenshot1 VARCHAR(1024),
-LargeScreenshot2 VARCHAR(1024),
-LargeScreenshot3 VARCHAR(1024),
-MediumScreenshot1 VARCHAR(1024),
-MediumScreenshot2 VARCHAR(1024),
-MediumScreenshot3 VARCHAR(1024),
-ImdbCode VARCHAR(20),
-ImdbLink VARCHAR(1024),
-MovieTitle VARCHAR(512),
-MovieTitleClean VARCHAR(512),
-MovieYear VARCHAR(5),
-MovieRating VARCHAR(5),
-MovieRuntime VARCHAR(20),
-YoutubeTrailerID VARCHAR(20),
-YoutubeTrailerUrl VARCHAR(1024),
-AgeRating VARCHAR(10),
-Genre1 VARCHAR(25),
-Genre2 VARCHAR(25),
-ShortDescription TEXT,
-LongDescription TEXT,
-Downloaded INT,
-TorrentUrl  VARCHAR(1024),
-TorrentHash VARCHAR(40),
-TorrentMagnetUrl VARCHAR(1024),
-TorrentSeeds INT,
-TorrentPeers INT,
-Size VARCHAR(25),
-SizeByte BIGINT
-);
+SET QUOTED_IDENTIFIER ON
+GO
 
---TRUNCATE table Movies;
+SET ANSI_PADDING ON
+GO
 
+CREATE TABLE [dbo].[movie_details](
+	[id] [int] NOT NULL CONSTRAINT [DF__movie_detail__id__0F975522]  DEFAULT ((0)),
+	[url] [varchar](1024) NULL,
+	[imdb_code] [varchar](20) NULL,
+	[title] [varchar](512) NULL,
+	[title_long] [varchar](512) NULL,
+	[slug] [varchar](512) NULL,
+	[year] [varchar](5) NULL,
+	[rating] [varchar](5) NULL,
+	[runtime] [varchar](20) NULL,
+	[language] [varchar](20) NULL,
+	[mpa_rating] [varchar](10) NULL,
+	[download_count] [int] NULL,
+	[like_count] [int] NULL,
+	[rt_critics_score] [int] NULL,
+	[rt_critics_rating] [varchar](25) NULL,
+	[rt_audience_score] [int] NULL,
+	[rt_audience_rating] [varchar](25) NULL,
+	[description_intro] [text] NULL,
+	[description_full] [text] NULL,
+	[yt_trailer_code] [varchar](20) NULL,
+	[date_uploaded] [date] NULL,
+	[date_uploaded_unix] [float] NULL,
+ CONSTRAINT [PK_movie_details] PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 
-Select * from Movies;
+GO
+
+SET ANSI_PADDING OFF
+GO
+
+SELECT MAX(id) FROM movie_details;
+
+SELECT * FROM movie_details;
+
+--truncate table movie_details;
