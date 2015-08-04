@@ -1,0 +1,2 @@
+﻿
+http://www.codeproject.com/Articles/169598/Parse-XML-Documents-by-XMLDocument-and-XDocument

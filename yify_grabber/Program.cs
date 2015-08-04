@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Data;
 using System.Data.SqlClient;
 using System.Xml;
+
+
 
 namespace yify_grabber
 {
@@ -15,7 +14,6 @@ namespace yify_grabber
         {
             Int32 ID;
             string connectionString = "Data Source=MONSTER-PC;Initial Catalog=yify;Integrated Security=True";
-            
 
             SqlConnection connection = new SqlConnection(connectionString);
             connection.Open();
@@ -32,104 +30,75 @@ namespace yify_grabber
             {
                 ID = 0;
             }
-            Console.WriteLine("Local Database has "+ID+" Records!");
+            Console.WriteLine("Local Database has " + ID + " Records!");
 
             //Get Maximum MovieID from Yify API
+
             XmlDocument list = new XmlDocument();
             list.Load("https://yts.to/api/v2/list_movies.xml");
 
             XmlNodeList elemlist = list.GetElementsByTagName("movie_count");
             String MaxMovieID = elemlist[0].InnerText;
 
-            Console.WriteLine("Yify Database has "+ MaxMovieID + " Movies!");
+            Console.WriteLine("Yify Database has " + MaxMovieID + " Movies!");
             Int32 MovieCount = Convert.ToInt32(MaxMovieID);
 
             //Collect and insert into database!
+
             for (ID = ID + 1; ID <= MovieCount; ID++)
             {
                 String XmlUrl = "https://yts.to/api/v2/movie_details.xml?movie_id=" + ID.ToString();
 
                 XmlDocument doc = new XmlDocument();
-                doc.Load(XmlUrl);
+                doc.Load(XmlUrl); //  TO-DO try  catch WebException 502
 
                 try
                 {
-                    XmlNodeList elemList = doc.GetElementsByTagName("id");
-                    String id = elemList[0].InnerText;
+                    XmlNode dataNode = doc.SelectSingleNode("/xml/data");
 
-                    elemList = doc.GetElementsByTagName("url");
-                    String url = elemList[0].InnerText;
+                    String id = dataNode.SelectSingleNode("id").InnerText;
+                    String url = dataNode.SelectSingleNode("url").InnerText;
+                    String imdb_code = dataNode.SelectSingleNode("imdb_code").InnerText;
+                    String title = dataNode.SelectSingleNode("title").InnerText;
+                    String title_long = dataNode.SelectSingleNode("title_long").InnerText;
+                    String slug = dataNode.SelectSingleNode("slug").InnerText;
+                    String year = dataNode.SelectSingleNode("year").InnerText;
+                    String rating = dataNode.SelectSingleNode("rating").InnerText;
+                    String runtime = dataNode.SelectSingleNode("runtime").InnerText;
 
-                    elemList = doc.GetElementsByTagName("imdb_code");
-                    String imdb_code = elemList[0].InnerText;
+                    XmlNode genresnode = doc.SelectSingleNode("/xml/data/genres");
+                    List<String> Genres = new List<String>();
 
-                    elemList = doc.GetElementsByTagName("title");
-                    String title = elemList[0].InnerText;
+                    foreach (XmlNode node in genresnode)
+                    {
+                        Genres.Add(node.InnerText);
+                    }
 
-                    elemList = doc.GetElementsByTagName("title_long");
-                    String title_long = elemList[0].InnerText;
+                    String genre1 = Genres[0];
+                    String genre2 = Genres[1];
 
-                    elemList = doc.GetElementsByTagName("slug");
-                    String slug = elemList[0].InnerText;
+                    //Console.WriteLine(genre1);
+                    //Console.WriteLine(genre2);
 
-                    elemList = doc.GetElementsByTagName("year");
-                    String year = elemList[0].InnerText;
+                    String language = dataNode.SelectSingleNode("language").InnerText;
+                    String mpa_rating = dataNode.SelectSingleNode("mpa_rating").InnerText;
+                    String download_count = dataNode.SelectSingleNode("download_count").InnerText;
+                    String like_count = dataNode.SelectSingleNode("like_count").InnerText;
+                    String rt_critics_score = dataNode.SelectSingleNode("rt_critics_score").InnerText;
+                    String rt_critics_rating = dataNode.SelectSingleNode("rt_critics_rating").InnerText;
+                    String rt_audience_score = dataNode.SelectSingleNode("rt_audience_score").InnerText;
+                    String rt_audience_rating = dataNode.SelectSingleNode("rt_audience_rating").InnerText;
+                    String description_intro = dataNode.SelectSingleNode("description_intro").InnerText;
+                    String description_full = dataNode.SelectSingleNode("description_full").InnerText;
+                    String yt_trailer_code = dataNode.SelectSingleNode("yt_trailer_code").InnerText;
+                    String date_uploaded = dataNode.SelectSingleNode("date_uploaded").InnerText;
+                    String date_uploaded_unix = dataNode.SelectSingleNode("date_uploaded_unix").InnerText;
 
-                    elemList = doc.GetElementsByTagName("rating");
-                    String rating = elemList[0].InnerText;
+                    /* <torrents> */
 
-                    elemList = doc.GetElementsByTagName("runtime");
-                    String runtime = elemList[0].InnerText;
-/*
-                    elemList = doc.GetElementsByTagName("genre1");
-                    String Language = elemList[0].InnerText;
-
-                    elemList = doc.GetElementsByTagName("genre2");
-                    String Subtitles = elemList[0].InnerText;
-*/
-                    elemList = doc.GetElementsByTagName("language");
-                    String language = elemList[0].InnerText;
-
-                    elemList = doc.GetElementsByTagName("mpa_rating");
-                    String mpa_rating = elemList[0].InnerText;
-
-                    elemList = doc.GetElementsByTagName("download_count");
-                    String download_count = elemList[0].InnerText;
-
-                    elemList = doc.GetElementsByTagName("like_count");
-                    String like_count = elemList[0].InnerText;
-
-                    elemList = doc.GetElementsByTagName("rt_critics_score");
-                    String rt_critics_score = elemList[0].InnerText;
-
-                    elemList = doc.GetElementsByTagName("rt_critics_rating");
-                    String rt_critics_rating = elemList[0].InnerText;
-
-                    elemList = doc.GetElementsByTagName("rt_audience_score");
-                    String rt_audience_score = elemList[0].InnerText;
-
-                    elemList = doc.GetElementsByTagName("rt_audience_rating");
-                    String rt_audience_rating = elemList[0].InnerText;
-
-                    elemList = doc.GetElementsByTagName("description_intro");
-                    String description_intro = elemList[0].InnerText;
-
-                    elemList = doc.GetElementsByTagName("description_full");
-                    String description_full = elemList[0].InnerText;
-
-                    elemList = doc.GetElementsByTagName("yt_trailer_code");
-                    String yt_trailer_code = elemList[0].InnerText;
-
-                    elemList = doc.GetElementsByTagName("date_uploaded");
-                    String date_uploaded = elemList[0].InnerText;
-
-                    elemList = doc.GetElementsByTagName("date_uploaded_unix");
-                    String date_uploaded_unix = elemList[0].InnerText;
-
-                    
                     Console.WriteLine(id + " - " + title_long);
 
-                    String InsertQuery = "INSERT INTO movie_details VALUES(@id,@url,@imdb_code,@title,@title_long,@slug,@year,@rating,@runtime,@language,@mpa_rating,@download_count,@like_count,@rt_critics_score,@rt_critics_rating,@rt_audience_score,@rt_audience_rating,@description_intro,@description_full,@yt_trailer_code,@date_uploaded,@date_uploaded_unix)";
+                    String InsertQuery = "INSERT INTO movie_details VALUES(@id,@url,@imdb_code,@title,@title_long,@slug,@year,@rating,@runtime,@genre1,@genre2,@language,@mpa_rating,@download_count,@like_count,@rt_critics_score,@rt_critics_rating,@rt_audience_score,@rt_audience_rating,@description_intro,@description_full,@yt_trailer_code,@date_uploaded,@date_uploaded_unix)";
                     //Console.WriteLine(InsertQuery);
 
                     SqlCommand command = new SqlCommand(InsertQuery, connection);
@@ -160,6 +129,12 @@ namespace yify_grabber
 
                     command.Parameters.Add("@runtime", SqlDbType.VarChar);
                     command.Parameters["@runtime"].Value = runtime;
+
+                    command.Parameters.Add("@genre1", SqlDbType.VarChar);
+                    command.Parameters["@genre1"].Value = genre1;
+
+                    command.Parameters.Add("@genre2", SqlDbType.VarChar);
+                    command.Parameters["@genre2"].Value = genre2;
 
                     command.Parameters.Add("@language", SqlDbType.VarChar);
                     command.Parameters["@language"].Value = language;
@@ -206,19 +181,21 @@ namespace yify_grabber
                     }
                     catch (Exception e)
                     {
-                       
-                       // Console.WriteLine(e.ToString());
+
+                        // Console.WriteLine(e.ToString());
                         Console.WriteLine(e.Message);
                     }
                 }
-                catch
+                catch (Exception e)
                 {
                     //If movie id is invalid show NULL! 
                     Console.WriteLine(ID + " - NULL");
+                    Console.WriteLine(e.Message);
                 }
             }
+
             Console.WriteLine("End of Execution");
-             Console.ReadKey();
+            Console.ReadKey();
         }
     }
 }
