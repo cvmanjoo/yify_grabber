@@ -52,7 +52,7 @@
     <Content Include="movie_details.xml">
       <SubType>Designer</SubType>
     </Content>
-    <Content Include="Query.sql" />
+    <Content Include="movie_details.sql" />
     <Content Include="References.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

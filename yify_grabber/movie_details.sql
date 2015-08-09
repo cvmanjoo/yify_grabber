@@ -1,9 +1,7 @@
-﻿--CREATE DATABASE yify;
-
 USE [yify]
 GO
 
-/****** Object:  Table [dbo].[movie_details]    Script Date: 15-May-2015 10:15:15 PM ******/
+/****** Object:  Table [dbo].[movie_details]    Script Date: 09-Aug-2015 5:36:29 PM ******/
 SET ANSI_NULLS ON
 GO
 
@@ -23,6 +21,8 @@ CREATE TABLE [dbo].[movie_details](
 	[year] [varchar](5) NULL,
 	[rating] [varchar](5) NULL,
 	[runtime] [varchar](20) NULL,
+	[genre1] [nchar](20) NULL,
+	[genre2] [nchar](20) NULL,
 	[language] [varchar](20) NULL,
 	[mpa_rating] [varchar](10) NULL,
 	[download_count] [int] NULL,
@@ -47,8 +47,4 @@ GO
 SET ANSI_PADDING OFF
 GO
 
-SELECT MAX(id) FROM movie_details;
 
-SELECT * FROM movie_details;
-
---truncate table movie_details;
