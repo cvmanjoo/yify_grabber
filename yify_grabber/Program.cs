@@ -139,6 +139,55 @@ namespace yify_grabber
 
                         /* TO DO: <torrents> */
 
+                        XmlNode TorrentsNode = movie_details.SelectSingleNode("/xml/data/torrents");
+
+                        foreach (XmlNode TorrentNode in TorrentsNode)
+                        {
+                            String mt_InsertQuery = "INSERT INTO movie_torrents VALUES(@id,@url,@hash,@quality,@resolution,@framerate,@seeds,@peers,@size,@size_bytes,@download_count,@date_uploaded,@date_uploaded_unix)";
+                            SqlCommand mt_Command = new SqlCommand(mt_InsertQuery, connection);
+
+                            mt_Command.Parameters.AddWithValue("@id",id);
+                            mt_Command.Parameters.AddWithValue("@url", TorrentNode.SelectSingleNode("url").InnerText);
+                            mt_Command.Parameters.AddWithValue("@hash", TorrentNode.SelectSingleNode("hash").InnerText);
+                            mt_Command.Parameters.AddWithValue("@quality", TorrentNode.SelectSingleNode("quality").InnerText);
+                            mt_Command.Parameters.AddWithValue("@resolution", TorrentNode.SelectSingleNode("resolution").InnerText);
+                            mt_Command.Parameters.AddWithValue("@framerate", TorrentNode.SelectSingleNode("framerate").InnerText);
+                            mt_Command.Parameters.AddWithValue("@seeds", TorrentNode.SelectSingleNode("seeds").InnerText);
+                            mt_Command.Parameters.AddWithValue("@peers", TorrentNode.SelectSingleNode("peers").InnerText);
+                            mt_Command.Parameters.AddWithValue("@size", TorrentNode.SelectSingleNode("size").InnerText);
+                            mt_Command.Parameters.AddWithValue("@size_bytes", TorrentNode.SelectSingleNode("size_bytes").InnerText);
+                            mt_Command.Parameters.AddWithValue("@download_count", TorrentNode.SelectSingleNode("download_count").InnerText);
+                            mt_Command.Parameters.AddWithValue("@date_uploaded", TorrentNode.SelectSingleNode("date_uploaded").InnerText);
+                            mt_Command.Parameters.AddWithValue("@date_uploaded_unix", TorrentNode.SelectSingleNode("date_uploaded_unix").InnerText);
+
+                            try
+                            {
+                                mt_Command.ExecuteNonQuery();
+                                //Console.WriteLine(id + " - " + title_long);
+                            }
+                            catch (Exception e)
+                            {
+                                Console.WriteLine("Torr Error "+ e.Message);
+                                Console.ReadKey();
+                            }
+
+                            /*
+                            String url = TorrentNode.SelectSingleNode("url").InnerText;
+                            String hash = TorrentNode.SelectSingleNode("hash").InnerText;
+                            String quality = TorrentNode.SelectSingleNode("quality").InnerText;
+                            String resolution = TorrentNode.SelectSingleNode("resolution").InnerText;
+                            String framerate = TorrentNode.SelectSingleNode("framerate").InnerText;
+                            String seeds = TorrentNode.SelectSingleNode("seeds").InnerText;
+                            String peers = TorrentNode.SelectSingleNode("peers").InnerText;
+                            String size = TorrentNode.SelectSingleNode("size").InnerText;
+                            String size_bytes = TorrentNode.SelectSingleNode("size_bytes").InnerText;
+                            String download_count = TorrentNode.SelectSingleNode("download_count").InnerText;
+                            String date_uploaded = TorrentNode.SelectSingleNode("date_uploaded").InnerText;
+                            String date_uploaded_unix = TorrentNode.SelectSingleNode("date_uploaded_unix").InnerText;
+                            */
+                        }
+
+
                         String InsertQuery = "INSERT INTO movie_details VALUES(@id,@url,@imdb_code,@title,@title_long,@slug,@year,@rating,@runtime,@genre1,@genre2,@language,@mpa_rating,@download_count,@like_count,@rt_critics_score,@rt_critics_rating,@rt_audience_score,@rt_audience_rating,@description_intro,@description_full,@yt_trailer_code,@date_uploaded,@date_uploaded_unix)";
                         //Console.WriteLine(InsertQuery);
 

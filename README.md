@@ -14,4 +14,4 @@ Basic useful feature list:
 - [X] Fixing insering Genres. 
 - [ ] Handling all the Exceptions caused.
 - [ ] Reformatting the code.
-- [ ] Create a separete table to keep torrents details.
+- [X] Create a separete table to keep torrents details.
