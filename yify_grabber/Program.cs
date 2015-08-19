@@ -170,21 +170,6 @@ namespace yify_grabber
                                 Console.WriteLine("Torr Error "+ e.Message);
                                 Console.ReadKey();
                             }
-
-                            /*
-                            String url = TorrentNode.SelectSingleNode("url").InnerText;
-                            String hash = TorrentNode.SelectSingleNode("hash").InnerText;
-                            String quality = TorrentNode.SelectSingleNode("quality").InnerText;
-                            String resolution = TorrentNode.SelectSingleNode("resolution").InnerText;
-                            String framerate = TorrentNode.SelectSingleNode("framerate").InnerText;
-                            String seeds = TorrentNode.SelectSingleNode("seeds").InnerText;
-                            String peers = TorrentNode.SelectSingleNode("peers").InnerText;
-                            String size = TorrentNode.SelectSingleNode("size").InnerText;
-                            String size_bytes = TorrentNode.SelectSingleNode("size_bytes").InnerText;
-                            String download_count = TorrentNode.SelectSingleNode("download_count").InnerText;
-                            String date_uploaded = TorrentNode.SelectSingleNode("date_uploaded").InnerText;
-                            String date_uploaded_unix = TorrentNode.SelectSingleNode("date_uploaded_unix").InnerText;
-                            */
                         }
 
 
